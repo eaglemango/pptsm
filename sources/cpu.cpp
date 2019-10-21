@@ -1,6 +1,5 @@
 #include "stack.hpp"
 
-#include <iostream>
 #include <cstdio>
 #include <cassert>
 #include <cstdlib>
@@ -105,10 +104,8 @@ void CPU::Execute() {
 
     bool active = true;
     while (active && curr_cell < machine.size / sizeof(int)) {
-        // std::cout << curr_cell;
         #define INSTRUCTION(NAME,SYNONYM,CODE,ACTION) \
             case CODE: \
-                std::cout << #NAME << ' '; \
                 ACTION \
                 break;
 
