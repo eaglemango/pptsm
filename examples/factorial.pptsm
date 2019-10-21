@@ -1,0 +1,38 @@
+get
+
+call factorial
+
+put
+
+end
+
+factorial:
+    top s
+    pop
+
+    top p
+    push s
+
+    push 1
+    push 1
+    push p
+    je grow
+
+    push p
+    sub
+
+    call factorial
+
+    grow:
+        top p
+        pop
+
+        top s
+        pop
+
+        push p
+        mul
+
+        push s
+
+        ret
