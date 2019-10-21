@@ -122,10 +122,10 @@ void CPU::Execute() {
     #undef INSTRUCTION
 }
 
-int main() {
+int main(int argc, char** argv) {
     CPU cpu;
 
-    cpu.LoadBinary("pptsm");
+    cpu.LoadBinary(argv[1]);
 
     cpu.Execute();
 
