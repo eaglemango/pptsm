@@ -224,14 +224,18 @@ void Assembler::TranslateCode() {
 }
 
 
-int main() {
+int main(int argc, char** argv) {
     Assembler assembler;
 
-    assembler.LoadCode("factorial.pptsm");
+    assembler.LoadCode(argv[1]);
 
     assembler.Assemble();
 
-    assembler.SaveCode("pptsm");
+    if (argc < 3) {
+        assembler.SaveCode("pptsm.exe");
+    } else {
+        assembler.SaveCode(argv[2]);
+    }
 
     return 0;
 }
