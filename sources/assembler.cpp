@@ -1,16 +1,14 @@
-#include <cstdlib>
-#include <cstdio>
 #include <cassert>
-#include <cstring>
 #include <cctype>
-
 #include <climits>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
-#include "constants.hpp"
 #include "code.hpp"
+#include "constants.hpp"
 #include "dynamic_buffer.hpp"
 
-static const char DELIMITERS[] = " \n\r\t";
 
 class Assembler {
 public:
@@ -133,7 +131,7 @@ void Assembler::TranslateCode() {
 
         // Skip labels
         if (token[token_length - 1] != ':') {
-            #define INSTRUCTION(NAME,SYNONYM,CODE,ACTION) \
+            #define INSTRUCTION(NAME, SYNONYM, CODE, ACTION) \
                 else if (!strcmp(token, #NAME) || !strcmp(token, #SYNONYM)) { \
                     machine.code[curr_cell] = INSTR_##NAME; \
                 }
@@ -158,9 +156,9 @@ void Assembler::TranslateCode() {
                 }
 
                 if (!is_parsed) {
-                    #define REGISTER(NAME,SYNONYM,CODE) \
+                    #define REGISTER(NAME, SYNONYM, CODE) \
                         else if (!strcmp(token, #NAME) || !strcmp(token, #SYNONYM)) { \
-                            machine.code[curr_cell] = INT32_MAX - REG_##NAME; \
+                            machine.code[curr_cell] = REG_##NAME; \
                         }
 
                     bool is_asm_bad = false;
