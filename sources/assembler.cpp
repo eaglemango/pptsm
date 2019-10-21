@@ -4,25 +4,12 @@
 #include <cstring>
 #include <cctype>
 #include <iostream>
-#include <vector>
+
 #include <climits>
 
 #include "constants.hpp"
 #include "code.hpp"
-
-template <class T>
-void IncreaseBuffer(T* buffer[], int* buffer_size) {
-    char* temp_buffer = (T*) calloc(*buffer_size * 2, sizeof(T));
-
-    for (int i = 0; i < *buffer_size; ++i) {
-        temp_buffer[i] = (*buffer)[i];
-    }
-
-    free(*buffer);
-
-    (*buffer) = temp_buffer;
-    *buffer_size *= 2;
-}
+#include "dynamic_buffer.hpp"
 
 static const int MAX_INSTRUCTION_SIZE = 4;
 static const int MAX_ARGUMENT_SIZE = 10;
@@ -54,22 +41,23 @@ private:
     Code<char> source;
     Code<int> machine;
 
-    int cells_count = 0;
-    int labels_count = 0;
-    std::vector<char*> labels;
-    std::vector<int> labels_addresses;
+    int cells_count;
+    DynamicBuffer<char*> labels;
+    DynamicBuffer<int> labels_addresses;
 };
   
 Assembler::Assembler() {
     source = Code<char>();
-
     machine = Code<int>();
+
+    cells_count = 0;
+
+    labels = DynamicBuffer<char*>(100);
+    labels_addresses = DynamicBuffer<int>(100);
 }
 
 Assembler::~Assembler() {
-    source.~Code();
-
-    machine.~Code();
+    labels.CleanContents();
 }
 
 void Assembler::LoadCode(char* file_path) {
@@ -112,6 +100,7 @@ void Assembler::Assemble() {
 
 // Map labels to addresses
 void Assembler::PreprocessCode() {
+    std::cout << "JOPA";
     char* source_copy = (char*) calloc(source.size, sizeof(char));
     assert(source_copy);
 
@@ -125,7 +114,7 @@ void Assembler::PreprocessCode() {
         // Check only labels
         if (token[token_length - 1] == ':') {
             token[token_length - 1] = '\0';
-             for (int i = 0; i < labels_count; ++i) {
+             for (int i = 0; i < labels.GetCurrSize(); ++i) {
                 if (!strcmp(token, labels[i])) {
                     std::cout << "Error: double label";
                 }
@@ -135,10 +124,8 @@ void Assembler::PreprocessCode() {
             char* token_copy = (char*) calloc(token_length, sizeof(char));
             token_copy = strcpy(token_copy, token);
 
-            labels.push_back(token_copy);
-            labels_addresses.push_back(cells_count);
-
-            ++labels_count;
+            labels.Add(token_copy);
+            labels_addresses.Add(cells_count);
 
         } else {
             ++cells_count;
@@ -147,7 +134,9 @@ void Assembler::PreprocessCode() {
         token = strtok(nullptr, DELIMITERS);
     }
 
+    assert(source_copy);
     free(source_copy);
+    source_copy = nullptr;
 }
 
 void Assembler::TranslateCode() {
@@ -179,8 +168,8 @@ void Assembler::TranslateCode() {
             else {
                 bool is_parsed = false;
 
-                for (int i = 0; i < labels_count; ++i) {
-                    std::cout << "LABELS COUNT: " << labels_count << '\n';
+                for (int i = 0; i < labels.GetCurrSize(); ++i) {
+                    std::cout << "LABELS COUNT: " << labels.GetCurrSize() << '\n';
                     std::cout << "token: " << token << '\n';
                     std::cout << "label: " << labels[i] << '\n';
                     if (!strcmp(token, labels[i])) {
