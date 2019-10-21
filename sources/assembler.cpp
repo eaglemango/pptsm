@@ -3,7 +3,6 @@
 #include <cassert>
 #include <cstring>
 #include <cctype>
-#include <iostream>
 
 #include <climits>
 
@@ -11,18 +10,7 @@
 #include "code.hpp"
 #include "dynamic_buffer.hpp"
 
-static const int MAX_INSTRUCTION_SIZE = 4;
-static const int MAX_ARGUMENT_SIZE = 10;
-
 static const char DELIMITERS[] = " \n\r\t";
-
-static const char* REGISTERS[] = {"p", "t", "s", "m"};
-static const int REGISTERS_COUNT = sizeof(REGISTERS) / sizeof(*REGISTERS);
-
-static const char* INSTRUCTIONS[] = {"end", "push", "pop", "top", "j", "ja", "jae", "jb", "jbe", "je", "jne", "add", "sub", "mul", "div", "get", "put"};
-static const int INSTRUCTIONS_COUNT = sizeof(INSTRUCTIONS) / sizeof(*INSTRUCTIONS);
-
-static const int ARGS_INSTRUCTIONS = 11;
 
 class Assembler {
 public:
@@ -42,6 +30,7 @@ private:
     Code<int> machine;
 
     int cells_count;
+
     DynamicBuffer<char*> labels;
     DynamicBuffer<int> labels_addresses;
 };
@@ -52,8 +41,8 @@ Assembler::Assembler() {
 
     cells_count = 0;
 
-    labels = DynamicBuffer<char*>(100);
-    labels_addresses = DynamicBuffer<int>(100);
+    labels = DynamicBuffer<char*>(1);
+    labels_addresses = DynamicBuffer<int>(1);
 }
 
 Assembler::~Assembler() {
@@ -85,10 +74,6 @@ void Assembler::SaveCode(char* file_path) {
     int write_count = fwrite(machine.code, sizeof(int), cells_count, machine_file);
     assert(write_count == cells_count);
 
-    for (int i = 0; i < cells_count; ++i) {
-        std::cout << machine.code[i] << ' ';
-    }
-
     int close_result = fclose(machine_file);
     assert(close_result != EOF);
 }
@@ -100,7 +85,6 @@ void Assembler::Assemble() {
 
 // Map labels to addresses
 void Assembler::PreprocessCode() {
-    std::cout << "JOPA";
     char* source_copy = (char*) calloc(source.size, sizeof(char));
     assert(source_copy);
 
@@ -116,11 +100,10 @@ void Assembler::PreprocessCode() {
             token[token_length - 1] = '\0';
              for (int i = 0; i < labels.GetCurrSize(); ++i) {
                 if (!strcmp(token, labels[i])) {
-                    std::cout << "Error: double label";
+                    printf("Error: double label");
                 }
             }
 
-            std::cout << "New label! " << token << '\n';
             char* token_copy = (char*) calloc(token_length, sizeof(char));
             token_copy = strcpy(token_copy, token);
 
@@ -150,8 +133,6 @@ void Assembler::TranslateCode() {
 
         // Skip labels
         if (token[token_length - 1] != ':') {
-            std::cout << "\nTOKEN: " << token << '\n';
- 
             #define INSTRUCTION(NAME,SYNONYM,CODE,ACTION) \
                 else if (!strcmp(token, #NAME) || !strcmp(token, #SYNONYM)) { \
                     machine.code[curr_cell] = INSTR_##NAME; \
@@ -169,13 +150,9 @@ void Assembler::TranslateCode() {
                 bool is_parsed = false;
 
                 for (int i = 0; i < labels.GetCurrSize(); ++i) {
-                    std::cout << "LABELS COUNT: " << labels.GetCurrSize() << '\n';
-                    std::cout << "token: " << token << '\n';
-                    std::cout << "label: " << labels[i] << '\n';
                     if (!strcmp(token, labels[i])) {
                         machine.code[curr_cell] = labels_addresses[i];
                         is_parsed = true;
-                        std::cout << "LABEL PARSED\n";
                         break;
                     }
                 }
@@ -195,7 +172,6 @@ void Assembler::TranslateCode() {
                     #include "registers.hpp"
 
                     else {
-                        std::cout << "DEFAULT ARGUMENT PARSED\n";
                         machine.code[curr_cell] = static_cast<int>(atof(token) * 1000);
                     }
 
