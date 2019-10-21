@@ -1,13 +1,12 @@
-#include "stack.hpp"
-
-#include <cstdio>
 #include <cassert>
-#include <cstdlib>
 #include <climits>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #include "code.hpp"
 #include "constants.hpp"
-#include <cmath>
+#include "stack.hpp"
 
 class CPU {
 public:
@@ -18,10 +17,8 @@ public:
 
     void Execute();
 
-    void ShowStack();
-
 private:
-    #define REGISTER(NAME,SYNONYM,CODE) \
+    #define REGISTER(NAME, SYNONYM, CODE) \
         int NAME = 0;
 
     #include "registers.hpp"
@@ -35,16 +32,9 @@ private:
     void UpdateRegister(int register_code, int value);
 };
 
-void CPU::ShowStack() {
-    while (!stack.IsEmpty()) {
-        std::cout << stack.Top() << ' ';
-        stack.Pop();
-    }
-}
-
 int CPU::ParseArgument(int argument) {
-    #define REGISTER(NAME,SYNONYM,CODE) \
-        case INT32_MAX - CODE: \
+    #define REGISTER(NAME, SYNONYM, CODE) \
+        case CODE: \
             return NAME;
 
     switch (argument) {
@@ -58,8 +48,8 @@ int CPU::ParseArgument(int argument) {
 }
 
 void CPU::UpdateRegister(int register_code, int value) {
-    #define REGISTER(NAME,SYNONYM,CODE) \
-       case INT32_MAX - CODE: \
+    #define REGISTER(NAME, SYNONYM, CODE) \
+       case CODE: \
            NAME = value; \
            break;
 
@@ -104,7 +94,7 @@ void CPU::Execute() {
 
     bool active = true;
     while (active && curr_cell < machine.size / sizeof(int)) {
-        #define INSTRUCTION(NAME,SYNONYM,CODE,ACTION) \
+        #define INSTRUCTION(NAME, SYNONYM, CODE, ACTION) \
             case CODE: \
                 ACTION \
                 break;
@@ -125,6 +115,4 @@ int main(int argc, char** argv) {
     cpu.LoadBinary(argv[1]);
 
     cpu.Execute();
-
-    cpu.ShowStack();
 }

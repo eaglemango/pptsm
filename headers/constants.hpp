@@ -1,4 +1,6 @@
-#define INSTRUCTION(NAME,SYNONYM,CODE,ACTION) INSTR_##NAME = CODE,
+const char DELIMITERS[] = " \n\r\t";
+
+#define INSTRUCTION(NAME, SYNONYM, CODE, ACTION) INSTR_##NAME = CODE,
 
 enum Instructions {
     #include "instructions.hpp"
@@ -6,7 +8,7 @@ enum Instructions {
 
 #undef INSTRUCTION
 
-#define REGISTER(NAME,SYNONYM,CODE) REG_##NAME = CODE,
+#define REGISTER(NAME, SYNONYM, CODE) REG_##NAME = CODE,
 
 enum Registers {
     #include "registers.hpp"
