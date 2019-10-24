@@ -1,3 +1,8 @@
+/*!
+    @file
+    @brief Constants for PPTSM
+    @warning All changes cause unpredictable consequences
+*/
 const char DELIMITERS[] = " \n\r\t";
 
 #define INSTRUCTION(NAME, CODE, ACTION) INSTR_##NAME = CODE,

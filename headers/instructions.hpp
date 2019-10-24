@@ -1,3 +1,7 @@
+/*!
+    @file
+    @brief PPTSM Assembly language instructions
+*/
 INSTRUCTION(END, 0, {
     active = false;
 })

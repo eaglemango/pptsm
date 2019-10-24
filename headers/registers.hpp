@@ -1,3 +1,7 @@
+/*!
+    @file
+    @brief PPTSM Emulator registers list
+*/
 REGISTER(P, 0)
 REGISTER(T, 1)
 REGISTER(S, 2)
