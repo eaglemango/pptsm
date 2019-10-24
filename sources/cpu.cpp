@@ -14,7 +14,7 @@ public:
     CPU();
     ~CPU();
 
-    void LoadBinary(char* file_path);
+    void LoadBinary(const char* file_path);
 
     void Execute();
 
@@ -72,7 +72,7 @@ CPU::~CPU() {
     machine.~Code();
 }
 
-void CPU::LoadBinary(char* file_path) {
+void CPU::LoadBinary(const char* file_path) {
     FILE* machine_file = fopen(file_path, "rb");
     assert(machine_file);
 
