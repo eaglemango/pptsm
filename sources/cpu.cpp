@@ -18,7 +18,7 @@ public:
     void Execute();
 
 private:
-    #define REGISTER(NAME, SYNONYM, CODE) \
+    #define REGISTER(NAME, CODE) \
         int NAME = 0;
 
     #include "registers.hpp"
@@ -33,7 +33,7 @@ private:
 };
 
 int CPU::ParseArgument(int argument) {
-    #define REGISTER(NAME, SYNONYM, CODE) \
+    #define REGISTER(NAME, CODE) \
         case CODE: \
             return NAME;
 
@@ -48,7 +48,7 @@ int CPU::ParseArgument(int argument) {
 }
 
 void CPU::UpdateRegister(int register_code, int value) {
-    #define REGISTER(NAME, SYNONYM, CODE) \
+    #define REGISTER(NAME, CODE) \
        case CODE: \
            NAME = value; \
            break;
@@ -94,7 +94,7 @@ void CPU::Execute() {
 
     bool active = true;
     while (active && curr_cell < machine.size / sizeof(int)) {
-        #define INSTRUCTION(NAME, SYNONYM, CODE, ACTION) \
+        #define INSTRUCTION(NAME, CODE, ACTION) \
             case CODE: \
                 ACTION \
                 break;
