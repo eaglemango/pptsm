@@ -6,6 +6,7 @@
 #include <cstring>
 
 #include "code.hpp"
+#include "config.hpp"
 #include "constants.hpp"
 #include "dynamic_buffer.hpp"
 
