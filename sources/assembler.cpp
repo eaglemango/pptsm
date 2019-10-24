@@ -16,8 +16,8 @@ public:
     Assembler();
     ~Assembler();
 
-    void LoadCode(char* file_path);
-    void SaveCode(char* file_path);
+    void LoadCode(const char* file_path);
+    void SaveCode(const char* file_path);
 
     void Assemble();
 
@@ -48,7 +48,7 @@ Assembler::~Assembler() {
     labels.CleanContents();
 }
 
-void Assembler::LoadCode(char* file_path) {
+void Assembler::LoadCode(const char* file_path) {
     FILE* source_file = fopen(file_path, "r");
     assert(source_file);
 
@@ -66,7 +66,7 @@ void Assembler::LoadCode(char* file_path) {
     assert(close_result != EOF);
 }
 
-void Assembler::SaveCode(char* file_path) {
+void Assembler::SaveCode(const char* file_path) {
     FILE* machine_file = fopen(file_path, "wb");
     assert(machine_file);
 
@@ -191,7 +191,7 @@ int main(int argc, char** argv) {
     assembler.Assemble();
 
     if (argc < 3) {
-        assembler.SaveCode("pptsm.exe");
+        assembler.SaveCode(PPTSM_ASM_OUTPUT);
     } else {
         assembler.SaveCode(argv[2]);
     }
