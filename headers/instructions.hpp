@@ -178,3 +178,7 @@ INSTRUCTION(SQRT, sqrt, 19, {
 
     stack.Push(T);
 })
+
+INSTRUCTION(MEOW, meow, 20, {
+    printf("Meow!\n");
+})
