@@ -63,89 +63,41 @@ INSTRUCTION(J, 8, {
     curr_cell = machine.code[curr_cell] - 1;
 })
 
+#define JMP(OPERATION) \
+    ++curr_cell; \
+    UpdateRegister(REG_T, stack.Top()); \
+    stack.Pop(); \
+    UpdateRegister(REG_T, static_cast<int>(T OPERATION stack.Top())); \
+    stack.Pop(); \
+    if (T) { \
+        curr_cell = machine.code[curr_cell] - 1; \
+    }    
+
 INSTRUCTION(JA, 9, {
-    ++curr_cell;
-
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
-
-    UpdateRegister(REG_T, static_cast<int>(T > stack.Top()));
-    stack.Pop();
-
-    if (T) {
-        curr_cell = machine.code[curr_cell] - 1;
-    }
+    JMP(>)
 })
 
 INSTRUCTION(JAE, 10, {
-    ++curr_cell;
-
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
-
-    UpdateRegister(REG_T, static_cast<int>(T >= stack.Top()));
-    stack.Pop();
-
-    if (T) {
-        curr_cell = machine.code[curr_cell] - 1;
-    }
+    JMP(>=)
 })
 
 INSTRUCTION(JB, 11, {
-    ++curr_cell;
-
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
-
-    UpdateRegister(REG_T, static_cast<int>(T < stack.Top()));
-    stack.Pop();
-
-    if (T) {
-        curr_cell = machine.code[curr_cell] - 1;
-    }
+    JMP(<)
 })
 
 INSTRUCTION(JBE, 12, {
-    ++curr_cell;
-
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
-
-    UpdateRegister(REG_T, static_cast<int>(T <= stack.Top()));
-    stack.Pop();
-
-    if (T) {
-        curr_cell = machine.code[curr_cell] - 1;
-    }
+    JMP(<=)
 })
 
 INSTRUCTION(JE, 13, {
-    ++curr_cell;
-
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
-
-    UpdateRegister(REG_T, static_cast<int>(T == stack.Top()));
-    stack.Pop();
-
-    if (T) {
-        curr_cell = machine.code[curr_cell] - 1;
-    }
+    JMP(==)
 })
 
 INSTRUCTION(JNE, 14, {
-    ++curr_cell;
-
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
-
-    UpdateRegister(REG_T, static_cast<int>(T != stack.Top()));
-    stack.Pop();
-
-    if (T) {
-        curr_cell = machine.code[curr_cell] - 1;
-    }
+    JMP(!=)
 })
+
+#undef JMP
 
 INSTRUCTION(GET, 15, {
     float temp = 0.0;
