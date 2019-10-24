@@ -16,6 +16,16 @@ These parts are complemented by additional parts:
 
 * Disassembler -- a program, which translates stack machine code to assembly language
 
+## Documentation
+
+You can get beautiful documentation using `Doxygen`:
+
+```
+$ doxygen Doxyfile
+```
+
+You'll find it in `doxymentation` folder.
+
 ## Requirements
 
 PPTSM requires [Stack](https://github.com/eaglemango/stack) for proper work. You can use your own instead (don't forget to make the similar interface or use adapter).
