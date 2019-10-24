@@ -1,20 +1,20 @@
-INSTRUCTION(END, end, 0, {
+INSTRUCTION(END, 0, {
     active = false;
 })
 
-INSTRUCTION(PUSH, push, 1, {
+INSTRUCTION(PUSH, 1, {
     stack.Push(ParseArgument(machine.code[++curr_cell]));
 })
 
-INSTRUCTION(POP, pop, 2, {
+INSTRUCTION(POP, 2, {
     stack.Pop();
 })
 
-INSTRUCTION(TOP, top, 3, {
+INSTRUCTION(TOP, 3, {
     UpdateRegister(machine.code[++curr_cell], stack.Top());
 })
 
-INSTRUCTION(ADD, add, 4, {
+INSTRUCTION(ADD, 4, {
     UpdateRegister(REG_T, stack.Top());
     stack.Pop();
 
@@ -24,7 +24,7 @@ INSTRUCTION(ADD, add, 4, {
     stack.Push(T);
 })
 
-INSTRUCTION(SUB, sub, 5, {
+INSTRUCTION(SUB, 5, {
     UpdateRegister(REG_T, stack.Top());
     stack.Pop();
 
@@ -34,7 +34,7 @@ INSTRUCTION(SUB, sub, 5, {
     stack.Push(T);
 })
 
-INSTRUCTION(MUL, mul, 6, {
+INSTRUCTION(MUL, 6, {
     UpdateRegister(REG_T, stack.Top());
     stack.Pop();
 
@@ -44,7 +44,7 @@ INSTRUCTION(MUL, mul, 6, {
     stack.Push(T);
 })
 
-INSTRUCTION(DIV, div, 7, {
+INSTRUCTION(DIV, 7, {
     UpdateRegister(REG_T, stack.Top());
     stack.Pop();
 
@@ -54,12 +54,12 @@ INSTRUCTION(DIV, div, 7, {
     stack.Push(T);
 })
 
-INSTRUCTION(J, j, 8, {
+INSTRUCTION(J, 8, {
     ++curr_cell;
     curr_cell = machine.code[curr_cell] - 1;
 })
 
-INSTRUCTION(JA, ja, 9, {
+INSTRUCTION(JA, 9, {
     ++curr_cell;
 
     UpdateRegister(REG_T, stack.Top());
@@ -73,7 +73,7 @@ INSTRUCTION(JA, ja, 9, {
     }
 })
 
-INSTRUCTION(JAE, jae, 10, {
+INSTRUCTION(JAE, 10, {
     ++curr_cell;
 
     UpdateRegister(REG_T, stack.Top());
@@ -87,7 +87,7 @@ INSTRUCTION(JAE, jae, 10, {
     }
 })
 
-INSTRUCTION(JB, jb, 11, {
+INSTRUCTION(JB, 11, {
     ++curr_cell;
 
     UpdateRegister(REG_T, stack.Top());
@@ -101,7 +101,7 @@ INSTRUCTION(JB, jb, 11, {
     }
 })
 
-INSTRUCTION(JBE, jbe, 12, {
+INSTRUCTION(JBE, 12, {
     ++curr_cell;
 
     UpdateRegister(REG_T, stack.Top());
@@ -115,7 +115,7 @@ INSTRUCTION(JBE, jbe, 12, {
     }
 })
 
-INSTRUCTION(JE, je, 13, {
+INSTRUCTION(JE, 13, {
     ++curr_cell;
 
     UpdateRegister(REG_T, stack.Top());
@@ -129,7 +129,7 @@ INSTRUCTION(JE, je, 13, {
     }
 })
 
-INSTRUCTION(JNE, jne, 14, {
+INSTRUCTION(JNE, 14, {
     ++curr_cell;
 
     UpdateRegister(REG_T, stack.Top());
@@ -143,7 +143,7 @@ INSTRUCTION(JNE, jne, 14, {
     }
 })
 
-INSTRUCTION(GET, get, 15, {
+INSTRUCTION(GET, 15, {
     float temp = 0.0;
     printf("GET: ");
     scanf("%f", &temp);
@@ -151,13 +151,13 @@ INSTRUCTION(GET, get, 15, {
     stack.Push(static_cast<int>(temp * 1000));
 })
 
-INSTRUCTION(PUT, put, 16, {
+INSTRUCTION(PUT, 16, {
     printf("PUT: %.3f\n", stack.Top() / 1000.0);
 
     stack.Pop();
 })
 
-INSTRUCTION(CALL, call, 17, {
+INSTRUCTION(CALL, 17, {
     ++curr_cell;
 
     stack.Push(curr_cell + 1);
@@ -165,12 +165,12 @@ INSTRUCTION(CALL, call, 17, {
     curr_cell = machine.code[curr_cell] - 1;
 })
 
-INSTRUCTION(RET, ret, 18, {
+INSTRUCTION(RET, 18, {
     curr_cell = stack.Top() - 1;
     stack.Pop();
 })
 
-INSTRUCTION(SQRT, sqrt, 19, {
+INSTRUCTION(SQRT, 19, {
     UpdateRegister(REG_T, stack.Top());
     stack.Pop();
 
@@ -179,6 +179,6 @@ INSTRUCTION(SQRT, sqrt, 19, {
     stack.Push(T);
 })
 
-INSTRUCTION(MEOW, meow, 20, {
+INSTRUCTION(MEOW, 20, {
     printf("Meow!\n");
 })

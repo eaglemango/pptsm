@@ -83,11 +83,7 @@ void Assembler::Assemble() {
 
 // Map labels to addresses
 void Assembler::PreprocessCode() {
-    char* source_copy = (char*) calloc(source.size, sizeof(char));
-    assert(source_copy);
-
-    source_copy = strcpy(source_copy, source.code);
-    assert(source_copy);
+    char* source_copy = strdup(source.code);
 
     char* token = strtok(source_copy, DELIMITERS);
     while (token) {
@@ -102,8 +98,7 @@ void Assembler::PreprocessCode() {
                 }
             }
 
-            char* token_copy = (char*) calloc(token_length, sizeof(char));
-            token_copy = strcpy(token_copy, token);
+            char* token_copy = strdup(token);
 
             labels.Add(token_copy);
             labels_addresses.Add(cells_count);
@@ -131,8 +126,8 @@ void Assembler::TranslateCode() {
 
         // Skip labels
         if (token[token_length - 1] != ':') {
-            #define INSTRUCTION(NAME, SYNONYM, CODE, ACTION) \
-                else if (!strcmp(token, #NAME) || !strcmp(token, #SYNONYM)) { \
+            #define INSTRUCTION(NAME, CODE, ACTION) \
+                else if (!strcasecmp(token, #NAME)) { \
                     machine.code[curr_cell] = INSTR_##NAME; \
                 }
 
@@ -156,8 +151,8 @@ void Assembler::TranslateCode() {
                 }
 
                 if (!is_parsed) {
-                    #define REGISTER(NAME, SYNONYM, CODE) \
-                        else if (!strcmp(token, #NAME) || !strcmp(token, #SYNONYM)) { \
+                    #define REGISTER(NAME, CODE) \
+                        else if (!strcasecmp(token, #NAME)) { \
                             machine.code[curr_cell] = REG_##NAME; \
                         }
 
