@@ -20,7 +20,7 @@ public:
         }
     }
 
-    void Add(T value);
+    void Add(const T& value);
 
     T operator[](size_t i) const;
 
@@ -97,7 +97,7 @@ DynamicBuffer<T>& DynamicBuffer<T>::operator=(const DynamicBuffer<T>& other) {
 }
 
 template <class T>
-void DynamicBuffer<T>::Add(T value) {
+void DynamicBuffer<T>::Add(const T& value) {
     assert(buffer);
 
     if (curr_size == max_size) {
