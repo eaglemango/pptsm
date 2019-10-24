@@ -1,3 +1,7 @@
+/*!
+    @file
+    @brief Assembler for assembly language
+*/
 #include <cassert>
 #include <cctype>
 #include <climits>
@@ -10,7 +14,11 @@
 #include "constants.hpp"
 #include "dynamic_buffer.hpp"
 
+/*!
+    @brief Assembler
 
+    Generates machine code for CPU Emulator
+*/
 class Assembler {
 public:
     Assembler();
@@ -33,7 +41,7 @@ private:
     DynamicBuffer<char*> labels;
     DynamicBuffer<int> labels_addresses;
 };
-  
+
 Assembler::Assembler() {
     source = Code<char>();
     machine = Code<int>();
@@ -48,6 +56,11 @@ Assembler::~Assembler() {
     labels.CleanContents();
 }
 
+/*!
+    @brief Load assembly code from file
+    @param[in] file_path Path to file
+    @param[out] . No return value
+*/
 void Assembler::LoadCode(const char* file_path) {
     FILE* source_file = fopen(file_path, "r");
     assert(source_file);
@@ -66,6 +79,11 @@ void Assembler::LoadCode(const char* file_path) {
     assert(close_result != EOF);
 }
 
+/*!
+    @brief Saves machine code to file
+    @param[in] file_path Path to file
+    @param[out] . No return value
+*/
 void Assembler::SaveCode(const char* file_path) {
     FILE* machine_file = fopen(file_path, "wb");
     assert(machine_file);
@@ -77,12 +95,22 @@ void Assembler::SaveCode(const char* file_path) {
     assert(close_result != EOF);
 }
 
+/*!
+    @brief Starts two-stage process of compilation
+    @param[in] . No input value
+    @param[out] . No return value
+*/
 void Assembler::Assemble() {
     PreprocessCode();
     TranslateCode();
 }
 
-// Map labels to addresses
+/*!
+    @brief Preprocesses lables
+    @param[in] . No input value
+    @param[out] . No return value
+    @warning Uses thread-unsafe strtok function
+*/
 void Assembler::PreprocessCode() {
     char* source_copy = strdup(source.code);
 
@@ -90,7 +118,6 @@ void Assembler::PreprocessCode() {
     while (token) {
         int token_length = strlen(token);
         
-        // Check only labels
         if (token[token_length - 1] == ':') {
             token[token_length - 1] = '\0';
              for (int i = 0; i < labels.GetCurrSize(); ++i) {
@@ -116,6 +143,12 @@ void Assembler::PreprocessCode() {
     source_copy = nullptr;
 }
 
+/*!
+    @brief Translates assembly code to machine code
+    @param[in] . No input value
+    @param[out] . No return value
+    @warning Uses thread-unsafe strtok function
+*/
 void Assembler::TranslateCode() {
     machine.code = (int*) calloc(cells_count, sizeof(int));
 
@@ -125,7 +158,6 @@ void Assembler::TranslateCode() {
     while (token) {
         int token_length = strlen(token);
 
-        // Skip labels
         if (token[token_length - 1] != ':') {
             #define INSTRUCTION(NAME, CODE, ACTION) \
                 else if (!strcasecmp(token, #NAME)) { \

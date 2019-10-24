@@ -1,3 +1,7 @@
+/*!
+    @file
+    @brief Dynamic buffer
+*/
 #include <cstdlib>
 
 template <class T>
@@ -121,6 +125,11 @@ size_t DynamicBuffer<T>::GetCurrSize() const {
     return curr_size;
 }
 
+/*!
+    @brief Increases buffer size
+    @param[in] . No input value
+    @param[out] . No return value
+*/
 template <class T>
 void DynamicBuffer<T>::Increase() {
     assert(buffer);

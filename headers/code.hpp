@@ -1,3 +1,7 @@
+/*!
+    @file
+    @brief Struct for storing source code
+*/
 template <class T>
 struct Code {
     Code() {
