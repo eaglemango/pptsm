@@ -5,6 +5,7 @@
 #include <cstdlib>
 
 #include "code.hpp"
+#include "config.hpp"
 #include "constants.hpp"
 #include "stack.hpp"
 
@@ -26,7 +27,7 @@ private:
     #undef REGISTER
 
     Code<int> machine;
-    Stack<int> stack = Stack<int>(100);
+    Stack<int> stack = Stack<int>(PPTSM_STACK_SIZE);
 
     int ParseArgument(int argument);
     void UpdateRegister(int register_code, int value);
