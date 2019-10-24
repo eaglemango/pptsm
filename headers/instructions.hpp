@@ -3,7 +3,11 @@ INSTRUCTION(END, 0, {
 })
 
 INSTRUCTION(PUSH, 1, {
-    stack.Push(ParseArgument(machine.code[++curr_cell]));
+    stack.Push(machine.code[++curr_cell]);
+})
+
+INSTRUCTION(PUSHR, 101, {
+    stack.Push(GetRegisterData(machine.code[++curr_cell]));
 })
 
 INSTRUCTION(POP, 2, {

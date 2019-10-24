@@ -155,6 +155,9 @@ void Assembler::TranslateCode() {
                     #define REGISTER(NAME, CODE) \
                         else if (!strcasecmp(token, #NAME)) { \
                             machine.code[curr_cell] = REG_##NAME; \
+                            if (machine.code[curr_cell - 1] == INSTR_PUSH) { \
+                                machine.code[curr_cell - 1] = INSTR_PUSHR; \
+                            } \
                         }
 
                     bool is_asm_bad = false;

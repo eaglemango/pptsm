@@ -29,20 +29,20 @@ private:
     Code<int> machine;
     Stack<int> stack = Stack<int>(PPTSM_STACK_SIZE);
 
-    int ParseArgument(int argument);
+    int GetRegisterData(int register_code);
     void UpdateRegister(int register_code, int value);
 };
 
-int CPU::ParseArgument(int argument) {
+int CPU::GetRegisterData(int register_code) {
     #define REGISTER(NAME, CODE) \
         case CODE: \
             return NAME;
 
-    switch (argument) {
+    switch (register_code) {
         #include "registers.hpp"
 
         default:
-            return argument;
+            return -1;
     }
 
     #undef REGISTER
