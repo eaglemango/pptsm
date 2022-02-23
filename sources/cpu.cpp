@@ -7,11 +7,11 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <stack>
 
 #include "code.hpp"
 #include "config.hpp"
 #include "constants.hpp"
-#include "stack.hpp"
 
 /*!
     @brief CPU Emulator
@@ -36,7 +36,7 @@ private:
     #undef REGISTER
 
     Code<int> machine;
-    Stack<int> stack = Stack<int>(PPTSM_STACK_SIZE);
+    std::stack<int> stack;
 
     int GetRegisterData(int register_code);
     void UpdateRegister(int register_code, int value);

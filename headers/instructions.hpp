@@ -7,59 +7,59 @@ INSTRUCTION(END, 0, {
 })
 
 INSTRUCTION(PUSH, 1, {
-    stack.Push(machine.code[++curr_cell]);
+    stack.push(machine.code[++curr_cell]);
 })
 
 INSTRUCTION(PUSHR, 101, {
-    stack.Push(GetRegisterData(machine.code[++curr_cell]));
+    stack.push(GetRegisterData(machine.code[++curr_cell]));
 })
 
 INSTRUCTION(POP, 2, {
-    stack.Pop();
+    stack.pop();
 })
 
 INSTRUCTION(TOP, 3, {
-    UpdateRegister(machine.code[++curr_cell], stack.Top());
+    UpdateRegister(machine.code[++curr_cell], stack.top());
 })
 
 INSTRUCTION(ADD, 4, {
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
+    UpdateRegister(REG_T, stack.top());
+    stack.pop();
 
-    UpdateRegister(REG_T, T + stack.Top());
-    stack.Pop();
+    UpdateRegister(REG_T, T + stack.top());
+    stack.pop();
 
-    stack.Push(T);
+    stack.push(T);
 })
 
 INSTRUCTION(SUB, 5, {
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
+    UpdateRegister(REG_T, stack.top());
+    stack.pop();
 
-    UpdateRegister(REG_T, T - stack.Top());
-    stack.Pop();
+    UpdateRegister(REG_T, T - stack.top());
+    stack.pop();
 
-    stack.Push(T);
+    stack.push(T);
 })
 
 INSTRUCTION(MUL, 6, {
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
+    UpdateRegister(REG_T, stack.top());
+    stack.pop();
 
-    UpdateRegister(REG_T, static_cast<int>((T / PPTSM_PRECISION) * (stack.Top() / PPTSM_PRECISION) * PPTSM_PRECISION));
-    stack.Pop();
+    UpdateRegister(REG_T, static_cast<int>((T / PPTSM_PRECISION) * (stack.top() / PPTSM_PRECISION) * PPTSM_PRECISION));
+    stack.pop();
 
-    stack.Push(T);
+    stack.push(T);
 })
 
 INSTRUCTION(DIV, 7, {
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
+    UpdateRegister(REG_T, stack.top());
+    stack.pop();
 
-    UpdateRegister(REG_T, static_cast<int>(1.0 * T / stack.Top() * PPTSM_PRECISION));
-    stack.Pop();
+    UpdateRegister(REG_T, static_cast<int>(1.0 * T / stack.top() * PPTSM_PRECISION));
+    stack.pop();
 
-    stack.Push(T);
+    stack.push(T);
 })
 
 INSTRUCTION(J, 8, {
@@ -69,10 +69,10 @@ INSTRUCTION(J, 8, {
 
 #define JMP(OPERATION) \
     ++curr_cell; \
-    UpdateRegister(REG_T, stack.Top()); \
-    stack.Pop(); \
-    UpdateRegister(REG_T, static_cast<int>(T OPERATION stack.Top())); \
-    stack.Pop(); \
+    UpdateRegister(REG_T, stack.top()); \
+    stack.pop(); \
+    UpdateRegister(REG_T, static_cast<int>(T OPERATION stack.top())); \
+    stack.pop(); \
     if (T) { \
         curr_cell = machine.code[curr_cell] - 1; \
     }    
@@ -108,35 +108,35 @@ INSTRUCTION(GET, 15, {
     printf("GET: ");
     scanf("%f", &temp);
 
-    stack.Push(static_cast<int>(temp * PPTSM_PRECISION));
+    stack.push(static_cast<int>(temp * PPTSM_PRECISION));
 })
 
 INSTRUCTION(PUT, 16, {
-    printf("PUT: %.3f\n", stack.Top() / PPTSM_PRECISION);
+    printf("PUT: %.3f\n", stack.top() / PPTSM_PRECISION);
 
-    stack.Pop();
+    stack.pop();
 })
 
 INSTRUCTION(CALL, 17, {
     ++curr_cell;
 
-    stack.Push(curr_cell + 1);
+    stack.push(curr_cell + 1);
 
     curr_cell = machine.code[curr_cell] - 1;
 })
 
 INSTRUCTION(RET, 18, {
-    curr_cell = stack.Top() - 1;
-    stack.Pop();
+    curr_cell = stack.top() - 1;
+    stack.pop();
 })
 
 INSTRUCTION(SQRT, 19, {
-    UpdateRegister(REG_T, stack.Top());
-    stack.Pop();
+    UpdateRegister(REG_T, stack.top());
+    stack.pop();
 
     UpdateRegister(REG_T, static_cast<int>(sqrt(T / PPTSM_PRECISION) * PPTSM_PRECISION));
 
-    stack.Push(T);
+    stack.push(T);
 })
 
 INSTRUCTION(MEOW, 20, {

@@ -27,5 +27,3 @@ $ doxygen Doxyfile
 You'll find it in `doxymentation` folder.
 
 ## Requirements
-
-PPTSM requires [Stack](https://github.com/eaglemango/stack) for proper work. You can use your own instead (don't forget to make the similar interface or use adapter).

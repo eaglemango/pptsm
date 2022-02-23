@@ -8,11 +8,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <vector>
 
 #include "code.hpp"
 #include "config.hpp"
 #include "constants.hpp"
-#include "dynamic_buffer.hpp"
 
 /*!
     @brief Assembler
@@ -38,8 +38,8 @@ private:
 
     int cells_count;
 
-    DynamicBuffer<char*> labels;
-    DynamicBuffer<int> labels_addresses;
+    std::vector<char*> labels;
+    std::vector<int> labels_addresses;
 };
 
 Assembler::Assembler() {
@@ -47,13 +47,12 @@ Assembler::Assembler() {
     machine = Code<int>();
 
     cells_count = 0;
-
-    labels = DynamicBuffer<char*>(1);
-    labels_addresses = DynamicBuffer<int>(1);
 }
 
 Assembler::~Assembler() {
-    labels.CleanContents();
+    for (auto label : labels) {
+        free(label);
+    }
 }
 
 /*!
@@ -120,7 +119,7 @@ void Assembler::PreprocessCode() {
         
         if (token[token_length - 1] == ':') {
             token[token_length - 1] = '\0';
-             for (int i = 0; i < labels.GetCurrSize(); ++i) {
+             for (int i = 0; i < labels.size(); ++i) {
                 if (!strcmp(token, labels[i])) {
                     printf("Error: double label");
                 }
@@ -128,8 +127,8 @@ void Assembler::PreprocessCode() {
 
             char* token_copy = strdup(token);
 
-            labels.Add(token_copy);
-            labels_addresses.Add(cells_count);
+            labels.push_back(token_copy);
+            labels_addresses.push_back(cells_count);
 
         } else {
             ++cells_count;
@@ -175,7 +174,7 @@ void Assembler::TranslateCode() {
             else {
                 bool is_parsed = false;
 
-                for (int i = 0; i < labels.GetCurrSize(); ++i) {
+                for (int i = 0; i < labels.size(); ++i) {
                     if (!strcmp(token, labels[i])) {
                         machine.code[curr_cell] = labels_addresses[i];
                         is_parsed = true;
