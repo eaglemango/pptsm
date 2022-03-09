@@ -142,3 +142,16 @@ INSTRUCTION(SQRT, 19, {
 INSTRUCTION(MEOW, 20, {
     printf("Meow!\n");
 })
+
+INSTRUCTION(TOPPOP, 21, {
+    UpdateRegister(machine.code[++curr_cell], stack.top());
+    stack.pop();
+})
+
+INSTRUCTION(PUTS, 22, {
+    int offset = machine.code[++curr_cell];
+
+    char* s = (char*) (machine.code + offset);
+
+    printf("%s\n", s);
+})
