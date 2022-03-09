@@ -1,0 +1,12 @@
+/*!
+    @file
+    @brief PPTSM Emulator registers list
+*/
+REGISTER(P, 0)
+REGISTER(T, 1)
+REGISTER(S, 2)
+REGISTER(M, 3)
+REGISTER(EAX, 4)
+REGISTER(EBX, 5)
+REGISTER(ECX, 6)
+REGISTER(EDX, 7)

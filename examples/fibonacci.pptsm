@@ -1,0 +1,71 @@
+puts greeting
+
+get
+
+call fibonacci
+
+puts answer
+
+put
+
+end
+
+fibonacci:
+    toppop m
+
+    top ecx
+
+    push 3
+    ja first_two
+
+    push 2
+    pushr ecx
+    sub
+
+    toppop ecx
+
+    push 1
+    push 1
+    top edx
+
+    pushr ecx
+    cycle:
+        toppop ecx
+
+        add
+        top ebx
+        pushr edx
+        pushr ebx
+        toppop edx
+
+        push 1
+        pushr ecx
+        sub
+        top ecx
+
+        push 0
+        je cleaning
+
+        pushr ecx
+        j cycle
+
+    first_two:
+        push 1
+
+        j return
+
+    cleaning:
+        pop
+
+        j return
+
+    return:
+        pushr m
+        ret
+
+.data
+greeting:
+    "Program can find i-th Fibonacci number"
+
+answer:
+    "i-th Fibonacci number is"

@@ -1,0 +1,122 @@
+get
+get
+get
+
+top s
+
+push 0
+je solve_linear_equation
+
+push s
+j solve_square_equation
+
+solve_square_equation:
+    top s
+    pop
+
+    top m
+    pop
+
+    push 4
+    push s
+    mul
+    mul
+
+    push m
+    push m
+    mul
+
+    sub
+
+    sqrt
+
+    top p
+
+    push 0
+    ja no_real_roots
+
+    push p
+    push 0
+    je one_real_root
+
+    push 2
+    push s
+    mul
+    
+    push m
+    push p
+    sub
+
+    div
+
+    put
+
+    push 2
+    push s
+    mul
+
+    push m
+    push p
+    push 0
+    sub
+    sub
+
+    div
+
+    put
+
+    end
+
+no_real_roots:
+    end
+
+one_real_root:
+    push 2
+    push s
+    mul
+
+    push m
+    push 0
+    sub
+
+    div
+
+    put
+
+    end
+
+solve_linear_equation:
+    top s
+
+    push 0
+    je constant
+
+    push s
+
+    push 0
+    sub
+
+    push 1
+    div
+
+    mul
+
+    put
+
+    end
+
+constant:
+    push 0
+
+    je infinity
+
+    end
+
+infinity:
+    push 0
+    push 0
+    
+    put
+    put
+    
+    end
