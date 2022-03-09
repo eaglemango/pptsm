@@ -12,10 +12,6 @@ PPTSM consists of three main parts:
 * Assembler -- a program, which translates your code to stack machine code
 * CPU Emulator -- a program, that launches assembled program on stack machine
 
-These parts are complemented by additional parts:
-
-* Disassembler -- a program, which translates stack machine code to assembly language
-
 ## Documentation
 
 You can get beautiful documentation using `Doxygen`:

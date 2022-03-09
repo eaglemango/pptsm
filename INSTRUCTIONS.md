@@ -12,6 +12,8 @@ Here you can find all PPTSM Assembly instructions with description.
 
 `TOP r` - writes data from top of stack to register
 
+`TOPPOP r` - TOP + POP in one action
+
 ## Arithmetic Instructions
 
 `ADD` - pops two values from stack and then pushes their sum
@@ -49,6 +51,8 @@ Here you can find all PPTSM Assembly instructions with description.
 `GET` - reads data from `stdin` and pushes it to stack
 
 `PUT` - pops value from stack and writes it to `stdout`
+
+`PUTS l` - writes string from label to `stdout`
 
 ## Others
 
