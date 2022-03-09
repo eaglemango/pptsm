@@ -36,8 +36,10 @@ private:
     #undef REGISTER
 
     Code<int> machine;
-    std::stack<int> stack;
+    int offset;
 
+    std::stack<int> stack;
+    
     int GetRegisterData(int register_code);
     void UpdateRegister(int register_code, int value);
 };
@@ -84,7 +86,7 @@ void CPU::UpdateRegister(int register_code, int value) {
 }
 
 CPU::CPU() {
-
+    machine.code = (int*) calloc(PPTSM_PROCESS_MEMORY_SIZE, sizeof(int));
 }
 
 CPU::~CPU() {
@@ -101,14 +103,14 @@ void CPU::LoadBinary(const char* file_path) {
     assert(machine_file);
 
     fseek(machine_file, 0, SEEK_END);
-    machine.size = ftell(machine_file);
+    machine.size = ftell(machine_file) / sizeof(int);
     fseek(machine_file, 0, SEEK_SET);
 
-    machine.code = (int*) calloc(machine.size, sizeof(int));
-
     assert(machine.code);
-    int read_count = fread(machine.code, sizeof(int), machine.size / sizeof(int), machine_file);
-    assert(read_count == machine.size / sizeof(int));
+    int read_count = fread(machine.code, sizeof(int), machine.size, machine_file);
+    assert(read_count == machine.size);
+
+    offset = machine.code[0];
 
     int close_result = fclose(machine_file);
     assert(close_result != EOF);
@@ -120,10 +122,10 @@ void CPU::LoadBinary(const char* file_path) {
     @param[out] . No return value
 */
 void CPU::Execute() {
-    int curr_cell = 0;
+    int curr_cell = offset;
 
     bool active = true;
-    while (active && curr_cell < machine.size / sizeof(int)) {
+    while (active && curr_cell < machine.size) {
         #define INSTRUCTION(NAME, CODE, ACTION) \
             case CODE: \
                 ACTION \
